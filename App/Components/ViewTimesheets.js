@@ -50,7 +50,7 @@ export default class ViewTimesheets extends Component {
     // this.setState({ show: true });
     const login_data = await AsyncStorage.getItem('login_responce_data');
     const parsed_data = JSON.parse(login_data);
-	this.setState({showLoader:true});
+    this.setState({showLoader: true});
     TimeSheetServices.viewEmployeeTimeSheet(
       parsed_data.userDetails.orgId,
       parsed_data.userDetails.userId,
@@ -58,18 +58,19 @@ export default class ViewTimesheets extends Component {
       debugger;
       if (response.data['responseCode'] === 200) {
         debugger;
+
+        // empDetails = response.data.viewTimesheetList.map((val) => {
+        debugger;
+        const timesheestData = response.data.viewTimesheetList;
+        timesheestData.isFrom = 'viewTimesheets';
+        this.setState({
+          employeeData: timesheestData,
+          dataForFiltering: response.data.viewTimesheetList,
+        });
+        empDetails = this.state.employeeData;
+        // });
         this.setState({
           showLoader: false,
-        });
-        empDetails = response.data.viewTimesheetList.map((val) => {
-          debugger;
-          const timesheestData = response.data.viewTimesheetList;
-          timesheestData.isFrom = 'viewTimesheets';
-          this.setState({
-            employeeData: timesheestData,
-            dataForFiltering: response.data.viewTimesheetList,
-          });
-          return this.state.employeeData;
         });
       } else {
         debugger;
@@ -80,6 +81,7 @@ export default class ViewTimesheets extends Component {
         ' TimeSheetServices ---> this.state.employeeData',
         this.state.employeeData,
       );
+      console.log(' TimeSheetServices ---> emp details', empDetails);
     });
   }
 
@@ -161,8 +163,7 @@ export default class ViewTimesheets extends Component {
   };
 
   renderText() {
-    if (this.state.employeeData == this.state.showLoader)
-      return <View style={{marginTop: 150}} />;
+    if (this.state.showLoader) return <View style={{marginTop: 150}} />;
     else
       return (
         <View>
@@ -220,12 +221,11 @@ export default class ViewTimesheets extends Component {
               />
             </Button>
           </View> */}
-              <ScrollView contentContainerStyle={{flexGrow:1}}>
-
+              <ScrollView contentContainerStyle={{flexGrow: 1}}>
                 {this.renderText()}
-				{ this.state.showLoader ? (
-                <ActivityIndicator color="grey" size="large" />
-				):null}
+                {this.state.showLoader ? (
+                  <ActivityIndicator color="grey" size="large" />
+                ) : null}
               </ScrollView>
             </View>
 

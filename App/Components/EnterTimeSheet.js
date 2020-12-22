@@ -244,7 +244,6 @@ export default function EnterTimeSheet({navigation}) {
       resultsArray != undefined &&
       resultsArray[0]['type']
     ) {
-      console.log('yyyyyyyyyyyyyyyyyyyees');
       debugger;
       for (let i = 0; i < resultsArray.length; i++) {
         request.append('attachments', resultsArray[i]);
@@ -253,8 +252,16 @@ export default function EnterTimeSheet({navigation}) {
     TimeSheetServices.create_timesheet(request)
       .then((res) => {
         if (res.data.responseCode === 201) {
-          alert('Submitted Successfully');
-
+          Alert.alert(
+            'Submitted!',
+            'Time Sheet Submitted Successfully',
+            [
+              {
+                text: 'Ok',
+              },
+            ],
+            {cancelable: false},
+          );
           {
             /*let obj = [...items];
             obj.forEach((each) => {
@@ -366,7 +373,16 @@ export default function EnterTimeSheet({navigation}) {
         .then((res) => {
           if (res.data.responseCode === 201) {
             // setLoader(false);
-            alert('Saved Successfully');
+            Alert.alert(
+              'Saved!',
+              'Time Sheet Saved Successfully',
+              [
+                {
+                  text: 'Ok',
+                },
+              ],
+              {cancelable: false},
+            );
             navigation.navigate('ViewTimesheets');
           } else {
             // setLoader(false);
@@ -416,7 +432,8 @@ export default function EnterTimeSheet({navigation}) {
                     />
                   </View>
                   <Text style={styles.headerText}>
-                    {moment(fobject.startDate).format('MM-DD-YYYY')} - {moment(fobject.endDate).format('MM-DD-YYYY')}
+                    {moment(fobject.startDate).format('MM-DD-YYYY')} -{' '}
+                    {moment(fobject.endDate).format('MM-DD-YYYY')}
                   </Text>
                   <View style={{backgroundColor: 'transparent', width: 20}}>
                     <Icon
@@ -428,10 +445,10 @@ export default function EnterTimeSheet({navigation}) {
                 </View>
               </LinearGradient>
               {/* <EnterTimesheetBody /> */}
-              <Grid >
+              <Grid>
                 <Row style={{paddingBottom: 7, paddingTop: 7}}>
                   <Col>
-                    <Text style={{fontWeight: 'bold',marginLeft:23}}>
+                    <Text style={{fontWeight: 'bold', marginLeft: 23}}>
                       {'Date'}
                     </Text>
                   </Col>
@@ -441,8 +458,7 @@ export default function EnterTimeSheet({navigation}) {
                       justifyContent: 'flex-start',
                       alignItems: 'center',
                     }}>
-                    <Text
-                      style={{fontWeight: 'bold',marginLeft:-28}}>
+                    <Text style={{fontWeight: 'bold', marginLeft: -28}}>
                       {'Regular Hours'}
                     </Text>
                   </Col>
@@ -453,7 +469,7 @@ export default function EnterTimeSheet({navigation}) {
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}>
-                    <Text style={{fontWeight: 'bold',marginLeft:-40}}>
+                    <Text style={{fontWeight: 'bold', marginLeft: -40}}>
                       {'OT Hours'}
                     </Text>
                   </Col>
@@ -492,7 +508,9 @@ export default function EnterTimeSheet({navigation}) {
                             ]}>
                             {timesheetDate}
                           </Text>
-                          <Text style={{fontSize:14,marginLeft:5}}>{weekDay}</Text>
+                          <Text style={{fontSize: 14, marginLeft: 5}}>
+                            {weekDay}
+                          </Text>
                         </View>
                       </Col>
                       <Col
@@ -500,11 +518,11 @@ export default function EnterTimeSheet({navigation}) {
                           flexDirection: 'row',
                           justifyContent: 'center',
                           alignItems: 'center',
-						  marginLeft:-100
+                          marginLeft: -100,
                         }}>
                         <NumericInput
                           value={
-                            item.regularHours === null ? '' : item.regularHours
+                            item.regularHours === null ? 0 : item.regularHours
                           }
                           id="regularHours"
                           name="regularHours"
@@ -554,7 +572,7 @@ export default function EnterTimeSheet({navigation}) {
                         {/* <Text style={styles.cardHeaderText}>{'02:00'}</Text> */}
                         {/* <InputFiled /> */}
                         <NumericInput
-                          value={item.otHours === null ? '' : item.otHours}
+                          value={item.otHours === null ? 0 : item.otHours}
                           //  onChange={value => console.log(value)}
                           onChange={(e) =>
                             rowChangeHandler(e, index, 'otHours')
@@ -604,7 +622,7 @@ export default function EnterTimeSheet({navigation}) {
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
-						marginLeft:10
+                        marginLeft: 10,
                       }}>
                       <Text style={{marginTop: 13}}>Remarks :</Text>
                       <Textarea
@@ -625,7 +643,7 @@ export default function EnterTimeSheet({navigation}) {
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'flex-start',
-						marginLeft:10
+                        marginLeft: 10,
                       }}>
                       <Text>Attachments :</Text>
                       <Button
@@ -811,7 +829,7 @@ const styles = StyleSheet.create({
     paddingRight: 15,
   },
   cardHeader: {
-  marginLeft:20,
+    marginLeft: 20,
   },
   cardHeaderText: {
     fontSize: 14,

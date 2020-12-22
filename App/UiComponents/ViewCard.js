@@ -7,7 +7,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import LinearGradient from 'react-native-linear-gradient';
 import moment from 'moment';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {withNavigation} from "react-navigation";
+import {withNavigation} from 'react-navigation';
 
 // const dataArray = [
 //   {title: 'First Element', content: 'Lorem ipsum dolor sit amet'},
@@ -38,11 +38,9 @@ const CardCollaps = (props) => {
 
   const getHeadertyle = (expanded) => {
     if (expanded) {
-      return ['#1F3F65', '#1D798598']
-      
+      return ['#1F3F65', '#1D798598'];
     } else {
-      return ['#fff', '#fff', '#fff']     
-  
+      return ['#fff', '#fff', '#fff'];
     }
   };
   const getStatuLabelstyle = (reviewerStatus) => {
@@ -54,31 +52,24 @@ const CardCollaps = (props) => {
       transform: [{rotate: '90deg'}],
       // textAlign: 'center',
       justifyContent: 'center',
-      backgroundColor:getStatustyle(reviewerStatus),
-    }   
+      backgroundColor: getStatustyle(reviewerStatus),
+    };
   };
   const getStatustyle = (reviewerStatus) => {
-    if ( reviewerStatus === 'A') {
-      return '#02C54B'
-      
-    } else if( reviewerStatus === 'R'){
-     return  '#990000'
-  
+    if (reviewerStatus === 'A') {
+      return '#02C54B';
+    } else if (reviewerStatus === 'R') {
+      return '#990000';
+    } else if (reviewerStatus === 'O') {
+      return '#014ED0';
+    } else if (reviewerStatus === 'S') {
+      return '#FF5733';
     }
-     else if( reviewerStatus === 'O'){
-     return  '#014ED0'   
-  
-    }
-     else if(reviewerStatus === 'S'){
-     return '#FF5733'   
-  
-    }   
   };
- 
 
   const _renderHeader = (item, expanded) => {
     const start_date = moment(item.startDate).format('MM-DD-YYYY');
-	const end_date = moment(item.endDate).format('MM-DD-YYYY');
+    const end_date = moment(item.endDate).format('MM-DD-YYYY');
     return (
       <LinearGradient
         // colors={expanded ?['#4c669f', '#3b5998', '#192f6a'] : ['#fff', '#fff', '#fff']}
@@ -87,8 +78,10 @@ const CardCollaps = (props) => {
           expanded ? styles.cardExpandedStyles : styles.cardClosedStyles,
         ]}>
         <View
-         style={[styles.cardSideLabel ,{ backgroundColor: getStatustyle(item.reviewerStatus)}]}          
-        >
+          style={[
+            styles.cardSideLabel,
+            {backgroundColor: getStatustyle(item.reviewerStatus)},
+          ]}>
           <Text style={styles.cardSideLabelText}>
             {item.reviewerStatus === 'A'
               ? 'Approved'
@@ -125,14 +118,18 @@ const CardCollaps = (props) => {
         </View>
         <View>
           {expanded ? (
-            <View style={{flexDirection:'column-reverse', justifyContent: 'center'}}>              
+            <View
+              style={{
+                flexDirection: 'column-reverse',
+                justifyContent: 'center',
+              }}>
               {/* <View >
                 <Icon
                   style={[expanded ? styles.iconExpand : styles.iconClose]}
                   name="keyboard-arrow-down"
                 />
               </View> */}
-              <View style={{marginLeft:20}}>
+              <View style={{marginLeft: 20}}>
                 <Fontisto
                   style={[expanded ? styles.iconExpand : styles.iconClose]}
                   name="angle-down"
@@ -140,12 +137,15 @@ const CardCollaps = (props) => {
               </View>
             </View>
           ) : (
-            <View style={{flexDirection:'column-reverse', justifyContent: 'center'}}>
-              <View style={{marginLeft:20}}>
+            <View
+              style={{
+                flexDirection: 'column-reverse',
+                justifyContent: 'center',
+              }}>
+              <View style={{marginLeft: 20}}>
                 <Fontisto
                   style={[expanded ? styles.iconExpand : styles.iconClose]}
                   name="angle-right"
-				 
                 />
               </View>
               {/* <View >
@@ -161,7 +161,7 @@ const CardCollaps = (props) => {
     );
   };
   const _renderContent = (item) => {
-      const submitted_date = moment(item.submittedDate).format('MM-DD-YYYY');
+    const submitted_date = moment(item.submittedDate).format('MM-DD-YYYY');
     return (
       <View
         //   style={[expanded ? styles.cardExpandedStyles : styles.cardClosedStyles]}
@@ -174,7 +174,7 @@ const CardCollaps = (props) => {
           marginLeft: 10,
           borderColor: '1 solid black',
           marginRight: 10,
-		  marginBottom:5,
+          marginBottom: 5,
           justifyContent: 'space-between',
           height: 130,
           flexWrap: 'wrap',
@@ -185,22 +185,32 @@ const CardCollaps = (props) => {
           //   alignItems: 'stretch',
         }}>
         <View style={{}}>
-          <Text style={{fontSize: 16,fontWeight:'bold',marginRight:20}}>Regular Hours</Text>
+          <Text style={{fontSize: 16, fontWeight: 'bold', marginRight: 20}}>
+            Regular Hours
+          </Text>
           <Text style={{fontSize: 12}}>{item.regularHours}:00</Text>
         </View>
         <View style={{}}>
-          <Text style={{fontSize: 16,fontWeight:'bold'}}>Total Hours</Text>
-          <Text style={{fontSize: 12,textAlign:'right'}}>{item.totalWeekhours}:00</Text>
+          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Total Hours</Text>
+          <Text style={{fontSize: 12, textAlign: 'right'}}>
+            {item.totalWeekhours}:00
+          </Text>
         </View>
         <View style={{}}>
-          <Text style={{fontSize: 16,fontWeight:'bold'}}>Employee Remarks</Text>
+          <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+            Employee Remarks
+          </Text>
           <Text style={{fontSize: 12}}>{item.remark}</Text>
         </View>
-        <View style={{flexDirection:'column'}}>
-          <Text style={{fontSize: 16,fontWeight:'bold'}}>Submitted Date</Text>
-          <Text style={{fontSize: 12,textAlign:'right'}}>{submitted_date}</Text>
-        
-		<TouchableOpacity onPress={() =>  {if (item.reviewerStatus === 'A' || item.reviewerStatus === 'S') {
+        <View style={{flexDirection: 'column'}}>
+          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Submitted Date</Text>
+          <Text style={{fontSize: 12, textAlign: 'right'}}>
+            {submitted_date}
+          </Text>
+
+          <TouchableOpacity
+            onPress={() => {
+              if (item.reviewerStatus === 'A' || item.reviewerStatus === 'S') {
                 props.navigation.navigate('ViewDetailedTimeSheet', {
                   inputDate: item.startDate,
                 });
@@ -209,11 +219,27 @@ const CardCollaps = (props) => {
                   inputDate: item.startDate,
                   navFrom: 'viewTimeSheets',
                 });
-              }}} style={{marginLeft:23,marginTop:15,width:90,height:22}}>
-			  <Text style={{color:'grey',marginLeft:45,marginBottom:3,fontSize:12,textTransform:'capitalize'}}>Open</Text>
-              <MaterialCommunityIcons name="open-in-new" size={16} color='grey' style={{marginTop:-18,marginLeft:75}} />
-            </TouchableOpacity>
-		</View>
+              }
+            }}
+            style={{marginLeft: 23, marginTop: 15, width: 90, height: 22}}>
+            <Text
+              style={{
+                color: 'grey',
+                marginLeft: 45,
+                marginBottom: 3,
+                fontSize: 12,
+                textTransform: 'capitalize',
+              }}>
+              Open
+            </Text>
+            <MaterialCommunityIcons
+              name="open-in-new"
+              size={16}
+              color="grey"
+              style={{marginTop: -18, marginLeft: 75}}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -234,7 +260,7 @@ const CardCollaps = (props) => {
           renderHeader={_renderHeader}
           renderContent={_renderContent}
         />
-		<Text style={{height:150}}></Text>
+        <Text style={{height: 150}}></Text>
       </Content>
     </Container>
   );
@@ -276,7 +302,7 @@ const styles = StyleSheet.create({
     shadowOffset: {height: 1, width: 1}, // IOS
     shadowOpacity: 1, // IOS
     shadowRadius: 1, //IOS
-	marginBottom:5
+    marginBottom: 5,
   },
   cardExpandedStyles: {
     flexDirection: 'row',
@@ -295,7 +321,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 1, // IOS
     shadowRadius: 1, //IOS
     color: 'white',
-	//marginBottom:10
+    //marginBottom:10
   },
   cardExpandedTextStyles: {
     color: 'white',
@@ -321,9 +347,9 @@ const styles = StyleSheet.create({
     transform: [{rotate: '90deg'}],
     // textAlign: 'center',
     justifyContent: 'center',
-	marginLeft:-21,
-	borderBottomLeftRadius:5,
-	borderBottomRightRadius:5
+    marginLeft: -21,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
   },
   cardSideLabelText: {
     fontSize: 10,

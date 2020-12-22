@@ -1,5 +1,14 @@
 import React from 'react';
-import {Text, Button, TouchableOpacity, ScrollView, SafeAreaView, ImageBackground, Image, Dimensions} from 'react-native';
+import {
+  Text,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+  ImageBackground,
+  Image,
+  Dimensions,
+} from 'react-native';
 import ViewTimesheets from '../Components/ViewTimesheets';
 import EnterTimeSheet from '../Components/EnterTimeSheet';
 import ViewDetailedTimeSheet from '../Components/ViewDetailedTimesheet';
@@ -8,19 +17,21 @@ import LoginPage from '../Components/LoginPage';
 import ChangePassword from '../Components/ChangePassword';
 import FileUploader from '../Components/FileUploader';
 import Logout from '../Components/Logout';
-import {createDrawerNavigator,DrawerItems} from 'react-navigation-drawer';
+import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 
-const { width, height } = Dimensions.get("window");
-const CustomDrawerComponent = props => (
-  <SafeAreaView style={{ flex: 1 }}>
-    <ImageBackground source={require("../../assests/images/SidebarImage.png")}  style={{width:width-150,height:height}}>
-    <ScrollView>
-      <DrawerItems {...props} />
-    </ScrollView>
+const {width, height} = Dimensions.get('window');
+const CustomDrawerComponent = (props) => (
+  <SafeAreaView style={{flex: 1}}>
+    <ImageBackground
+      source={require('../../assests/images/SidebarImage.png')}
+      style={{width: width - 150, height: height}}>
+      <ScrollView>
+        <DrawerItems {...props} />
+      </ScrollView>
     </ImageBackground>
   </SafeAreaView>
 );
@@ -31,50 +42,42 @@ const SideBarItems = createDrawerNavigator(
       screen: ViewTimesheets,
       navigationOptions: {
         drawerLabel: 'View Timesheets',
-		drawerIcon: ({ tintColor }) => (
+        drawerIcon: ({tintColor}) => (
           <Image
-              source={require("../../assests/images/timeSheet.png")}
-			  style={{width:14,height:14}}
-            />
-        )
+            source={require('../../assests/images/timeSheet.png')}
+            style={{width: 14, height: 14}}
+          />
+        ),
       },
     },
     EnterTimeSheet: {
       screen: EnterTimeSheet,
       navigationOptions: {
-        drawerLabel: 'Enter Timesheets',
-		drawerIcon: ({ tintColor }) => (
+        drawerLabel: 'Enter Timesheet',
+        drawerIcon: ({tintColor}) => (
           <Image
-              source={require("../../assests/images/createTimesheet.png")}
-			  style={{width:14,height:14}}
-            />
-        )
+            source={require('../../assests/images/createTimesheet.png')}
+            style={{width: 14, height: 14}}
+          />
+        ),
       },
     },
     ChangePassword: {
       screen: ChangePassword,
       navigationOptions: {
         drawerLabel: 'Change Password',
-		drawerIcon: ({ tintColor }) => (
-          <Feather
-              name="lock"
-			  color={tintColor}
-              size={18}
-            />
-        )
+        drawerIcon: ({tintColor}) => (
+          <Feather name="lock" color={tintColor} size={18} />
+        ),
       },
     },
     Logout: {
       screen: Logout,
       navigationOptions: {
         drawerLabel: 'Logout',
-		drawerIcon: ({ tintColor }) => (
-          <FontAwesome
-              name="power-off"
-			  color={tintColor}
-              size={18}
-            />
-        )
+        drawerIcon: ({tintColor}) => (
+          <FontAwesome name="power-off" color={tintColor} size={18} />
+        ),
       },
     },
   },
@@ -84,20 +87,20 @@ const SideBarItems = createDrawerNavigator(
       cardStyle: {opacity: 1},
     },
     initialRouteName: 'ViewTimesheets',
-     contentComponent: CustomDrawerComponent,
+    contentComponent: CustomDrawerComponent,
     drawerPosition: 'left',
     drawerType: 'front',
-    drawerWidth: width-150,
+    drawerWidth: width - 150,
     minSwipeDistance: 10,
     drawerLockMode: 'unlocked',
     backBehavior: 'initialRoute',
     detachInactiveScreens: true,
-	unmountInactiveRoutes:true,
-	contentOptions: {
-      activeTintColor: "white",
-	  inactiveTintColor :'white',
-      activeBackgroundColor :'#1999CE',
-    }
+    unmountInactiveRoutes: true,
+    contentOptions: {
+      activeTintColor: 'white',
+      inactiveTintColor: 'white',
+      activeBackgroundColor: '#1999CE',
+    },
   },
 );
 
@@ -109,6 +112,13 @@ const SideNav = createStackNavigator(
         title: 'Time Sheets',
         headerTitleAlign: 'center',
         cardStyle: {opacity: 1},
+        headerTitle: () => (
+          <Image
+            source={require('../../assests/images/logo.png')}
+            resizeMode="contain"
+          />
+        ),
+        // headerStyle: {backgroundColor: 'blue'},
         headerLeft: () => (
           <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
             <MaterialCommunityIcons
@@ -136,7 +146,7 @@ const SideNav = createStackNavigator(
     ViewDetailedTimeSheet: {
       screen: ViewDetailedTimeSheet,
       navigationOptions: {
-        title: 'Time Sheets',
+        title: 'Time Sheet',
         headerTitleAlign: 'center',
       },
     },

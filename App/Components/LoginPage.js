@@ -36,7 +36,7 @@ export default class LoginPage extends Component {
       showLoader: false,
       employeeData: [],
     };
-	this.login_button = this.login_button.bind(this)
+    this.login_button = this.login_button.bind(this);
   }
 
   validate_field() {
@@ -155,15 +155,18 @@ export default class LoginPage extends Component {
           />
         </View>
         {!!this.state.emailError && (
-          <Text
-            style={{
-              color: 'red',
-              marginTop: -15,
-              marginBottom: 5,
-              marginLeft: -120,
-            }}>
-            {this.state.emailError}
-          </Text>
+          <View style={{width: 250}}>
+            <Text
+              style={{
+                color: 'red',
+                marginTop: -15,
+                marginBottom: 5,
+                alignSelf: 'flex-start',
+                marginLeft: 18,
+              }}>
+              {this.state.emailError}
+            </Text>
+          </View>
         )}
 
         <View style={styles.inputContainer}>
@@ -182,15 +185,18 @@ export default class LoginPage extends Component {
           />
         </View>
         {!!this.state.pswdError && (
-          <Text
-            style={{
-              color: 'red',
-              marginTop: -15,
-              marginLeft: -100,
-              marginBottom: 5,
-            }}>
-            {this.state.pswdError}
-          </Text>
+          <View style={{width: 250}}>
+            <Text
+              style={{
+                color: 'red',
+                marginTop: -15,
+                marginBottom: 5,
+                alignSelf: 'flex-start',
+                marginLeft: 18,
+              }}>
+              {this.state.pswdError}
+            </Text>
+          </View>
         )}
         <TouchableOpacity
           style={styles.buttonContainer}
