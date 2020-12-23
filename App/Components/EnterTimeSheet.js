@@ -47,7 +47,7 @@ export default function EnterTimeSheet({navigation}) {
   const [loading, setLoading] = useState(false);
   const [resultsArray, setResultsArray] = useState([]);
   const [prevDBattachments, setPrevDBattachments] = useState([]);
-  const [refreshScreen, setRefreshScreen] = useState(false);
+  const [otEnable, setOtEnable] = useState(false);
   const dateFromView = navigation.getParam('inputDate');
   const navFrom = navigation.getParam('navFrom');
 
@@ -58,7 +58,7 @@ export default function EnterTimeSheet({navigation}) {
         type: [DocumentPicker.types.allFiles],
       });
       setResults(res.length);
-      setResultsArray((prevState) => [...prevState, res]);
+      await setResultsArray((prevState) => [...prevState, ...res]);
       console.log(resultsArray);
 
       debugger;
@@ -171,6 +171,7 @@ export default function EnterTimeSheet({navigation}) {
       async (result) => {
         if (result.data.responseCode === 200) {
           set_TotalHours(result.data.timesheetDetails[0].totalWeekhours);
+          setOtEnable(result.data.timesheetDetails[0].otEnable);
           let i;
           for (
             i = 0;
@@ -192,6 +193,7 @@ export default function EnterTimeSheet({navigation}) {
             'backend attahments',
           );
           await setItems(result.data.timesheetDetails[1].timeSheetDetails);
+          console.log(result.data.timesheetDetails[1].timeSheetDetails);
           //  setAttachmentsArray(attachmentsArray);
           if (
             result.data.timesheetDetails[0].vendorName !== null &&
@@ -250,7 +252,11 @@ export default function EnterTimeSheet({navigation}) {
     // resultsArray != null &&
     // resultsArray != undefined &&
     // resultsArray[0]['type']
-    if (resultsArray.length) {
+    if (
+      resultsArray != null &&
+      resultsArray != undefined &&
+      resultsArray.length
+    ) {
       debugger;
       for (let i = 0; i < resultsArray.length; i++) {
         request.append('attachments', resultsArray[i]);
@@ -370,7 +376,11 @@ export default function EnterTimeSheet({navigation}) {
       // resultsArray != null &&
       // resultsArray != undefined &&
       // resultsArray[0]['type']
-      if (resultsArray.length) {
+      if (
+        resultsArray != null &&
+        resultsArray != undefined &&
+        resultsArray.length
+      ) {
         debugger;
         for (let i = 0; i < resultsArray.length; i++) {
           request.append('attachments', resultsArray[i]);
@@ -439,7 +449,7 @@ export default function EnterTimeSheet({navigation}) {
                     />
                   </View>
                   <Text style={styles.headerText}>
-                    {moment(fobject.startDate).format('MM-DD-YYYY')} -{' '}
+                    {moment(fobject.startDate).format('MM-DD-YYYY')} -
                     {moment(fobject.endDate).format('MM-DD-YYYY')}
                   </Text>
                   <View style={{backgroundColor: 'transparent', width: 20}}>
@@ -469,17 +479,19 @@ export default function EnterTimeSheet({navigation}) {
                       {'Regular Hours'}
                     </Text>
                   </Col>
-                  <Col
-                    style={styles.cardHeader}
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{fontWeight: 'bold', marginLeft: -40}}>
-                      {'OT Hours'}
-                    </Text>
-                  </Col>
+                  {otEnable ? (
+                    <Col
+                      style={styles.cardHeader}
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text style={{fontWeight: 'bold', marginLeft: -40}}>
+                        {'OT Hours'}
+                      </Text>
+                    </Col>
+                  ) : null}
                 </Row>
                 {items.map((item, index) => {
                   let str = item.weekDay;
@@ -503,12 +515,14 @@ export default function EnterTimeSheet({navigation}) {
                               {
                                 backgroundColor:
                                   item.weekDay === 'Sunday' ||
-                                  item.weekDay === 'Saturday'
+                                  item.weekDay === 'Saturday' ||
+                                  item.holiday
                                     ? '#B4B6DB'
-                                    : '',
+                                    : '#f2f2f2',
                                 borderColor:
                                   item.weekDay === 'Sunday' ||
-                                  item.weekDay === 'Saturday'
+                                  item.weekDay === 'Saturday' ||
+                                  item.holiday
                                     ? '#B4B6DB'
                                     : '#D8DBDB',
                               },
@@ -550,75 +564,80 @@ export default function EnterTimeSheet({navigation}) {
                           iconStyle={{color: 'black', fontSize: 15}}
                           rightButtonBackgroundColor={
                             item.weekDay === 'Sunday' ||
-                            item.weekDay === 'Saturday'
+                            item.weekDay === 'Saturday' ||
+                            item.holiday
                               ? '#B4B6DB'
                               : '#f2f2f2'
                           }
                           leftButtonBackgroundColor={
                             item.weekDay === 'Sunday' ||
-                            item.weekDay === 'Saturday'
+                            item.weekDay === 'Saturday' ||
+                            item.holiday
                               ? '#B4B6DB'
                               : '#f2f2f2'
                           }
                           containerStyle={{
                             backgroundColor:
                               item.weekDay === 'Sunday' ||
-                              item.weekDay === 'Saturday'
+                              item.weekDay === 'Saturday' ||
+                              item.holiday
                                 ? '#B4B6DB'
                                 : 'white',
                           }}
                         />
                       </Col>
-                      <Col
-                        style={styles.cardHeader}
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                        }}>
-                        {/* <Text style={styles.cardHeaderText}>{'02:00'}</Text> */}
-                        {/* <InputFiled /> */}
-                        <NumericInput
-                          value={item.otHours === null ? 0 : item.otHours}
-                          //  onChange={value => console.log(value)}
-                          onChange={(e) =>
-                            rowChangeHandler(e, index, 'otHours')
-                          }
-                          type="plus-minus"
-                          id="otHours"
-                          name="otHours"
-                          onLimitReached={(isMax, msg) =>
-                            console.log(isMax, msg)
-                          }
-                          totalWidth={110}
-                          totalHeight={30}
-                          iconSize={25}
-                          step={1}
-                          valueType="real"
-                          rounded
-                          textColor="black"
-                          iconStyle={{color: 'black', fontSize: 15}}
-                          rightButtonBackgroundColor={
-                            item.weekDay === 'Sunday' ||
-                            item.weekDay === 'Saturday'
-                              ? '#B4B6DB'
-                              : '#f2f2f2'
-                          }
-                          leftButtonBackgroundColor={
-                            item.weekDay === 'Sunday' ||
-                            item.weekDay === 'Saturday'
-                              ? '#B4B6DB'
-                              : '#f2f2f2'
-                          }
-                          containerStyle={{
-                            backgroundColor:
+                      {otEnable ? (
+                        <Col
+                          style={styles.cardHeader}
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}>
+                          {/* <Text style={styles.cardHeaderText}>{'02:00'}</Text> */}
+                          {/* <InputFiled /> */}
+                          <NumericInput
+                            value={item.otHours === null ? 0 : item.otHours}
+                            //  onChange={value => console.log(value)}
+                            onChange={(e) =>
+                              rowChangeHandler(e, index, 'otHours')
+                            }
+                            type="plus-minus"
+                            id="otHours"
+                            name="otHours"
+                            onLimitReached={(isMax, msg) =>
+                              console.log(isMax, msg)
+                            }
+                            totalWidth={110}
+                            totalHeight={30}
+                            iconSize={25}
+                            step={1}
+                            valueType="real"
+                            rounded
+                            textColor="black"
+                            iconStyle={{color: 'black', fontSize: 15}}
+                            rightButtonBackgroundColor={
                               item.weekDay === 'Sunday' ||
                               item.weekDay === 'Saturday'
                                 ? '#B4B6DB'
-                                : 'white',
-                          }}
-                        />
-                      </Col>
+                                : '#f2f2f2'
+                            }
+                            leftButtonBackgroundColor={
+                              item.weekDay === 'Sunday' ||
+                              item.weekDay === 'Saturday'
+                                ? '#B4B6DB'
+                                : '#f2f2f2'
+                            }
+                            containerStyle={{
+                              backgroundColor:
+                                item.weekDay === 'Sunday' ||
+                                item.weekDay === 'Saturday'
+                                  ? '#B4B6DB'
+                                  : 'white',
+                            }}
+                          />
+                        </Col>
+                      ) : null}
                     </Row>
                   );
                 })}
