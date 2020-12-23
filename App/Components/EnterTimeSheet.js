@@ -25,6 +25,7 @@ import {
   Alert,
   AsyncStorage,
   ActivityIndicator,
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Table from '../UiComponents/Table';
@@ -44,7 +45,7 @@ export default function EnterTimeSheet({navigation}) {
   const [remarks, setRemarks] = useState('');
   const [totalResults, setResults] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [resultsArray, setResultsArray] = useState([{}]);
+  const [resultsArray, setResultsArray] = useState([]);
   const [prevDBattachments, setPrevDBattachments] = useState([]);
   const [refreshScreen, setRefreshScreen] = useState(false);
   const dateFromView = navigation.getParam('inputDate');
@@ -57,7 +58,7 @@ export default function EnterTimeSheet({navigation}) {
         type: [DocumentPicker.types.allFiles],
       });
       setResults(res.length);
-      setResultsArray(res);
+      setResultsArray((prevState) => [...prevState, res]);
       console.log(resultsArray);
 
       debugger;
@@ -69,6 +70,12 @@ export default function EnterTimeSheet({navigation}) {
       //   throw err;
       // }
     }
+  };
+
+  const onCapture = (data) => {
+    data.name = JSON.stringify(new Date()) + 'Capture';
+    data.type = 'image/jpeg';
+    setResultsArray((prevState) => [...prevState, data]);
   };
 
   const loginData = async () => {
@@ -110,7 +117,7 @@ export default function EnterTimeSheet({navigation}) {
   };
 
   const PastWeeksHandler = async () => {
-    debugger;
+    setResultsArray([]);
     let startDate = new Date(fobject.startDate);
     startDate = moment(startDate).subtract(1, 'day').format('YYYY-MM-DD');
     const login_data = await AsyncStorage.getItem('login_responce_data');
@@ -122,6 +129,7 @@ export default function EnterTimeSheet({navigation}) {
     );
   };
   const futureWeeksHandler = async () => {
+    setResultsArray([]);
     let endDate = new Date(fobject.endDate);
     endDate = moment(endDate).add(1, 'day').format('YYYY-MM-DD');
     const login_data = await AsyncStorage.getItem('login_responce_data');
@@ -179,10 +187,10 @@ export default function EnterTimeSheet({navigation}) {
               );
           }
           setPrevDBattachments(result.data.timesheetDetails[1].attachments);
-          // console.log(
-          //   result.data.timesheetDetails[1].attachments,
-          //   'backend attahments',
-          // );
+          console.log(
+            result.data.timesheetDetails[1].attachments,
+            'backend attahments',
+          );
           await setItems(result.data.timesheetDetails[1].timeSheetDetails);
           //  setAttachmentsArray(attachmentsArray);
           if (
@@ -239,11 +247,10 @@ export default function EnterTimeSheet({navigation}) {
       timeSheetDetails: getTimeSheetDetails(),
     };
     request.append('timsheetData', JSON.stringify(timesheetData));
-    if (
-      resultsArray != null &&
-      resultsArray != undefined &&
-      resultsArray[0]['type']
-    ) {
+    // resultsArray != null &&
+    // resultsArray != undefined &&
+    // resultsArray[0]['type']
+    if (resultsArray.length) {
       debugger;
       for (let i = 0; i < resultsArray.length; i++) {
         request.append('attachments', resultsArray[i]);
@@ -321,7 +328,8 @@ export default function EnterTimeSheet({navigation}) {
 
   const form_validate = async () => {
     if (prevDBattachments.length === 0) {
-      if (!resultsArray[0]['type']) {
+      // !resultsArray[0]['type']
+      if (!resultsArray.length) {
         await Alert.alert('Select atleast one Attachment file');
         return false;
       } else {
@@ -359,11 +367,10 @@ export default function EnterTimeSheet({navigation}) {
     if (regulatHourValidate || otHoursValidate || descriptionValidate) {
       request.append('timsheetData', JSON.stringify(timesheetData));
 
-      if (
-        resultsArray != null &&
-        resultsArray != undefined &&
-        resultsArray[0]['type']
-      ) {
+      // resultsArray != null &&
+      // resultsArray != undefined &&
+      // resultsArray[0]['type']
+      if (resultsArray.length) {
         debugger;
         for (let i = 0; i < resultsArray.length; i++) {
           request.append('attachments', resultsArray[i]);
@@ -649,6 +656,10 @@ export default function EnterTimeSheet({navigation}) {
                       <Button
                         light
                         onPress={onPressImagePickr}
+                        disabled={
+                          fobject.reviewerStatus == 'S' ||
+                          fobject.reviewerStatus == 'A'
+                        }
                         style={{
                           marginLeft: 10,
                           marginRight: 10,
@@ -675,7 +686,11 @@ export default function EnterTimeSheet({navigation}) {
                           width: 44,
                           alignItems: 'center',
                         }}
-                        onPress={() => navigation.navigate('CameraPage')}>
+                        onPress={() =>
+                          navigation.navigate('CameraPage', {
+                            onCapture: onCapture,
+                          })
+                        }>
                         <MaterialCommunityIcons
                           name="camera"
                           size={30}
@@ -787,13 +802,7 @@ export default function EnterTimeSheet({navigation}) {
                           const x = await form_validate();
                           x
                             ? enterTimeSheetService()
-                            : console.log(
-                                '......................',
-                                '\n',
-                                'unable to submit form',
-                                '\n',
-                                '......................',
-                              );
+                            : console.log('unable to submit form');
                         }}
                         style={{
                           marginLeft: 25,
