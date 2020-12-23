@@ -13,7 +13,7 @@ import {
   Input,
   Textarea,
 } from 'native-base';
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import moment from 'moment';
 import {NavigationEvents} from 'react-navigation';
@@ -651,8 +651,9 @@ export default function EnterTimeSheet({navigation}) {
                         onPress={onPressImagePickr}
                         style={{
                           marginLeft: 10,
+                          marginRight: 10,
                           width: 80,
-                          height: 20,
+                          height: 30,
                           borderRadius: 30,
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -668,6 +669,19 @@ export default function EnterTimeSheet({navigation}) {
                 </TouchableOpacity>
             <Text style={{marginStart:20}}>{totalResults}</Text> */}
                       </Button>
+
+                      <TouchableOpacity
+                        style={{
+                          width: 44,
+                          alignItems: 'center',
+                        }}
+                        onPress={() => navigation.navigate('CameraPage')}>
+                        <MaterialCommunityIcons
+                          name="camera"
+                          size={30}
+                          style={{color: 'grey'}}
+                        />
+                      </TouchableOpacity>
                     </View>
                     {/* <Text style={{ marginLeft: 10,}}>Files Count:{totalResults}</Text> */}
                     <ScrollView>

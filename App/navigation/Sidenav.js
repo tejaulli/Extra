@@ -15,6 +15,7 @@ import ViewDetailedTimeSheet from '../Components/ViewDetailedTimesheet';
 import LoginPage from '../Components/LoginPage';
 
 import ChangePassword from '../Components/ChangePassword';
+import CameraPage from '../Components/CameraPage';
 import FileUploader from '../Components/FileUploader';
 import Logout from '../Components/Logout';
 import {createDrawerNavigator, DrawerItems} from 'react-navigation-drawer';
@@ -148,6 +149,12 @@ const SideNav = createStackNavigator(
       navigationOptions: {
         title: 'Time Sheet',
         headerTitleAlign: 'center',
+      },
+    },
+    CameraPage: {
+      screen: CameraPage,
+      navigationOptions: {
+        headerShown: false,
       },
     },
 
