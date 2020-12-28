@@ -48,6 +48,7 @@ export default function EnterTimeSheet({navigation}) {
   const [resultsArray, setResultsArray] = useState([]);
   const [prevDBattachments, setPrevDBattachments] = useState([]);
   const [otEnable, setOtEnable] = useState(false);
+  const holidayIndex = [];
   const dateFromView = navigation.getParam('inputDate');
   const navFrom = navigation.getParam('navFrom');
 
@@ -73,9 +74,12 @@ export default function EnterTimeSheet({navigation}) {
   };
 
   const onCapture = (data) => {
-    data.name = JSON.stringify(new Date()) + 'Capture';
-    data.type = 'image/jpeg';
-    setResultsArray((prevState) => [...prevState, data]);
+    if (Object.keys(data).length) {
+      data.name = JSON.stringify(new Date()) + 'Capture';
+      data.type = 'image/jpeg';
+      setResultsArray((prevState) => [...prevState, data]);
+    }
+    console.log('pic is not taken');
   };
 
   const loginData = async () => {
@@ -464,49 +468,62 @@ export default function EnterTimeSheet({navigation}) {
               {/* <EnterTimesheetBody /> */}
               <Grid>
                 <Row style={{paddingBottom: 7, paddingTop: 7}}>
-                  <Col>
-                    <Text style={{fontWeight: 'bold', marginLeft: 23}}>
-                      {'Date'}
-                    </Text>
-                  </Col>
                   <Col
+                    size={1}
                     style={{
                       flexDirection: 'row',
-                      justifyContent: 'flex-start',
+                      justifyContent: 'center',
                       alignItems: 'center',
+                      // backgroundColor: 'green',
                     }}>
-                    <Text style={{fontWeight: 'bold', marginLeft: -28}}>
-                      {'Regular Hours'}
-                    </Text>
+                    <Text style={{fontWeight: 'bold'}}>{'Date'}</Text>
+                  </Col>
+                  <Col
+                    size={3}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      // backgroundColor: 'yellow',
+                    }}>
+                    <Text style={{fontWeight: 'bold'}}>{'Regular Hours'}</Text>
                   </Col>
                   {otEnable ? (
                     <Col
-                      style={styles.cardHeader}
+                      // style={styles.cardHeader}
+                      size={3}
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'center',
                         alignItems: 'center',
+                        // backgroundColor: 'tomato',
                       }}>
-                      <Text style={{fontWeight: 'bold', marginLeft: -40}}>
-                        {'OT Hours'}
-                      </Text>
+                      <Text style={{fontWeight: 'bold'}}>{'OT Hours'}</Text>
                     </Col>
                   ) : null}
                 </Row>
                 {items.map((item, index) => {
                   let str = item.weekDay;
+                  item.holiday ? holidayIndex.push(index) : null;
 
                   let weekDay = str.substring(0, 3);
                   let date = item.timesheetDate;
                   let timesheetDate = date.substring(8, 10);
                   return (
                     <Row style={{paddingBottom: 7}} key={index}>
-                      <Col style={styles.cardHeader}>
+                      <Col
+                        size={1}
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          // backgroundColor: 'green',
+                        }}>
                         <View
                           style={{
                             flexDirection: 'column',
-                            justifyContent: 'flex-start',
-                            alignItems: 'flex-start',
+                            justifyContent: 'center',
+                            alignItems: 'center',
                             marginTop: 12,
                           }}>
                           <Text
@@ -529,17 +546,16 @@ export default function EnterTimeSheet({navigation}) {
                             ]}>
                             {timesheetDate}
                           </Text>
-                          <Text style={{fontSize: 14, marginLeft: 5}}>
-                            {weekDay}
-                          </Text>
+                          <Text style={{fontSize: 14}}>{weekDay}</Text>
                         </View>
                       </Col>
                       <Col
+                        size={3}
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'center',
                           alignItems: 'center',
-                          marginLeft: -100,
+                          // backgroundColor: 'yellow',
                         }}>
                         <NumericInput
                           value={
@@ -554,10 +570,11 @@ export default function EnterTimeSheet({navigation}) {
                           onLimitReached={(isMax, msg) =>
                             console.log(isMax, msg)
                           }
-                          totalWidth={110}
-                          totalHeight={30}
+                          totalWidth={140} //110 previous
+                          totalHeight={40} //30 previous
                           iconSize={25}
                           step={1}
+                          minValue={0}
                           valueType="real"
                           rounded
                           textColor="black"
@@ -588,11 +605,12 @@ export default function EnterTimeSheet({navigation}) {
                       </Col>
                       {otEnable ? (
                         <Col
-                          style={styles.cardHeader}
+                          size={3}
                           style={{
                             flexDirection: 'row',
                             justifyContent: 'center',
                             alignItems: 'center',
+                            // backgroundColor: 'tomato',
                           }}>
                           {/* <Text style={styles.cardHeaderText}>{'02:00'}</Text> */}
                           {/* <InputFiled /> */}
@@ -608,30 +626,34 @@ export default function EnterTimeSheet({navigation}) {
                             onLimitReached={(isMax, msg) =>
                               console.log(isMax, msg)
                             }
-                            totalWidth={110}
-                            totalHeight={30}
+                            totalWidth={140} //110 previous
+                            totalHeight={40} //30 previous
                             iconSize={25}
                             step={1}
                             valueType="real"
                             rounded
+                            minValue={0}
                             textColor="black"
                             iconStyle={{color: 'black', fontSize: 15}}
                             rightButtonBackgroundColor={
                               item.weekDay === 'Sunday' ||
-                              item.weekDay === 'Saturday'
+                              item.weekDay === 'Saturday' ||
+                              item.holiday
                                 ? '#B4B6DB'
                                 : '#f2f2f2'
                             }
                             leftButtonBackgroundColor={
                               item.weekDay === 'Sunday' ||
-                              item.weekDay === 'Saturday'
+                              item.weekDay === 'Saturday' ||
+                              item.holiday
                                 ? '#B4B6DB'
                                 : '#f2f2f2'
                             }
                             containerStyle={{
                               backgroundColor:
                                 item.weekDay === 'Sunday' ||
-                                item.weekDay === 'Saturday'
+                                item.weekDay === 'Saturday' ||
+                                item.holiday
                                   ? '#B4B6DB'
                                   : 'white',
                             }}
@@ -758,6 +780,11 @@ export default function EnterTimeSheet({navigation}) {
                           rowChangeHandler(0, 0, 'regularHours');
                           rowChangeHandler(0, 1, 'regularHours');
                           rowChangeHandler(0, 'default', 'otHours');
+                          if (holidayIndex.length) {
+                            holidayIndex.map((indx) =>
+                              rowChangeHandler(0, indx, 'regularHours'),
+                            );
+                          }
                         }}
                         style={{
                           marginLeft: 10,

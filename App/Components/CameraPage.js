@@ -23,6 +23,7 @@ export class CameraPage extends Component {
   };
   retakePic = async () => {
     if (this.camera) {
+      await this.setState({picDetails: {}});
       this.camera.resumePreview();
     }
   };
@@ -39,8 +40,9 @@ export class CameraPage extends Component {
             alignItems: 'center',
           }}
           captureAudio={false}
+          playSoundOnCapture={true}
           type={RNCamera.Constants.Type.back}
-          flashMode={RNCamera.Constants.FlashMode.on}
+          flashMode={RNCamera.Constants.FlashMode.off}
           androidCameraPermissionOptions={{
             title: 'Permission to use camera',
             message: 'We need your permission to use your camera',
@@ -76,7 +78,7 @@ export class CameraPage extends Component {
                   style={{
                     flex: 0,
                     margin: 20,
-                    backgroundColor: '#fff',
+                    // backgroundColor: '#fff',
                     paddingHorizontal: 20,
                   }}>
                   <MaterialCommunityIcons
