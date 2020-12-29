@@ -1,21 +1,19 @@
-import React, { useState,useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {Col, Row, Grid} from 'react-native-easy-grid';
-import { Text,View} from 'native-base';
-import {StyleSheet, TouchableOpacity,Button} from 'react-native';
+import {Text, View} from 'native-base';
+import {StyleSheet, TouchableOpacity, Button} from 'react-native';
 import TimeSheetServices from '../Services/TimesheetServices';
 import moment from 'moment';
 export default function ViewDetailedBody(props) {
-    // const [tabledata,setTabledata]=useState()
-    const [items, setItems] = useState([]);
-    
+  // const [tabledata,setTabledata]=useState()
+  const [items, setItems] = useState([]);
 
-    useEffect(() => {
-     console.log("DDDDDFUNCTION",props.timesheetViewData.timeSheetDetails) ;
-     setItems(props.timesheetViewData.timeSheetDetails)
-
+  useEffect(() => {
+    console.log('DDDDDFUNCTION', props.timesheetViewData.timeSheetDetails);
+    setItems(props.timesheetViewData.timeSheetDetails);
 
     //  debugger;
-  
+
     // TimeSheetServices.get_timesheet("1","6","2020-10-10").then((response) => {
 
     //   debugger;
@@ -35,57 +33,89 @@ export default function ViewDetailedBody(props) {
     //           Number(
     //             response.data.timesheetDetails[1].timeSheetDetails[i].otHours
     //           );
-       
+
     //       }
     //      setItems(response.data.timesheetDetails[1].timeSheetDetails);
-    //   console.log("VIEWDATA11",response.data.timesheetDetails[1].timeSheetDetails)         
+    //   console.log("VIEWDATA11",response.data.timesheetDetails[1].timeSheetDetails)
     //     } else {
     //       alert("Something went wrong!")
     //     }
 
     //  })
-  
-      
-     }, [props.timesheetViewData.timeSheetDetails]);
-
+  }, [props.timesheetViewData.timeSheetDetails]);
 
   return (
     <Grid>
-      <Row style={{paddingBottom:7,paddingTop:7}}>
+      <Row style={{paddingBottom: 7, paddingTop: 7}}>
         <Col style={styles.cardHeader}>
-          <Text style={[styles.cardHeaderText,{fontWeight:'bold'}]}>{'Date'}</Text>
+          <Text style={[styles.cardHeaderText, {fontWeight: 'bold'}]}>
+            {'Date'}
+          </Text>
         </Col>
-        <Col style={styles.cardHeader} style={{flexDirection: 'row',justifyContent: 'center',alignItems: 'center',}}>
-          <Text style={[styles.cardHeaderText,{fontWeight:'bold'}]}>{'Regular Hours'}</Text>
+        <Col
+          style={styles.cardHeader}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={[styles.cardHeaderText, {fontWeight: 'bold'}]}>
+            {'Regular Hours'}
+          </Text>
         </Col>
-        <Col style={styles.cardHeader} style={{flexDirection: 'row',justifyContent: 'center',alignItems: 'center',}}>
-          <Text style={[styles.cardHeaderText,{fontWeight:'bold'}]}>{'Total Hours'}</Text>
+        <Col
+          style={styles.cardHeader}
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text style={[styles.cardHeaderText, {fontWeight: 'bold'}]}>
+            {'Total Hours'}
+          </Text>
         </Col>
       </Row>
-{/* <Grid> */}
-  {items?.map((item,index)=>{
-  const timesheet_date = moment(item.timesheetDate).format('MM-DD-YYYY');
-return(
-<Row style={{paddingBottom:7,paddingTop:7}}  key={item.id}>
-        <Col style={styles.cardHeader}>
-          <View style={{flexDirection: 'column',justifyContent: 'center',alignItems: 'center',}}>
-         <Text style={styles.cardHeaderText}>{timesheet_date}</Text>
-              <Text style={styles.cardHeaderText}>{item.weekDay}</Text>
-          </View>
-        </Col>
-        <Col style={styles.cardHeader} style={{flexDirection: 'row',justifyContent: 'center',alignItems: 'center',}}>
-          <Text style={styles.cardHeaderText}>{item.regularHours}:00</Text>
-        </Col>
-        <Col style={styles.cardHeader} style={{flexDirection: 'row',justifyContent: 'center',alignItems: 'center',}}>
-<Text style={styles.cardHeaderText}>{item.rowHours}:00</Text>
-        </Col>
-      </Row>
+      {/* <Grid> */}
+      {items?.map((item, index) => {
+        const timesheet_date = moment(item.timesheetDate).format('MM-DD-YYYY');
+        return (
+          <Row style={{paddingBottom: 7, paddingTop: 7}} key={item.id}>
+            <Col style={styles.cardHeader}>
+              <View
+                style={{
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text style={styles.cardHeaderText}>{timesheet_date}</Text>
+                <Text style={styles.cardHeaderText}>{item.weekDay}</Text>
+              </View>
+            </Col>
+            <Col
+              style={styles.cardHeader}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.cardHeaderText}>
+                {item.regularHours ? item.regularHours : 0}:00
+              </Text>
+            </Col>
+            <Col
+              style={styles.cardHeader}
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.cardHeaderText}>{item.rowHours}:00</Text>
+            </Col>
+          </Row>
+        );
+      })}
 
-)
-
-  })}
- 
-{/*       
+      {/*       
       </Grid> */}
       {/* <Row style={{paddingBottom:7,paddingTop:7}}>
         <Col style={styles.cardHeader}>
@@ -159,14 +189,14 @@ return(
   );
 }
 const styles = StyleSheet.create({
-    cardHeader:{
-        // backgroundColor: '#635DB7',
-        // flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        // fontSize:12
-    },
-    cardHeaderText:{
-        fontSize:14
-    }
+  cardHeader: {
+    // backgroundColor: '#635DB7',
+    // flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // fontSize:12
+  },
+  cardHeaderText: {
+    fontSize: 14,
+  },
 });
