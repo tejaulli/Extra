@@ -215,10 +215,27 @@ export default class ViewDetailedTimesheet extends Component {
 			{Object.keys(this.state.attachedImages).map((key, index) => {
           return (
 			<View style={{marginTop:10,marginBottom:10}}>
+			{this.state.attachedImages[key].attachments.toString().includes(".png") ||
+                      this.state.attachedImages[key].attachments.toString().includes(".jpg") ||
+                      this.state.attachedImages[key].attachments.toString().includes(".jpeg") ? (
 				<Image 
 					source={{ uri: USER_API_BASE_URL+""+`${this.state.attachedImages[key].attachments}` }}
 					style={{width:80,height:60,marginRight:5,marginLeft:10}}
 				/>
+				):
+				(
+				this.state.attachedImages[key].attachments.toString().includes(".pdf") ? (
+				<Image 
+					source={require('../../assests/images/pdf.png')}
+					style={{width:80,height:60,marginRight:5,marginLeft:10}}
+				/>
+				):(
+				<Image 
+					source={require('../../assests/images/excel.png')}
+					style={{width:80,height:60,marginRight:5,marginLeft:10}}
+				/>
+				)
+				)}
 			</View>
 			)
            })}

@@ -149,9 +149,6 @@ export default function EnterTimeSheet({navigation}) {
     //Get timesheet
     loginData();
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
   }, []);
 
   const rowChangeHandler = (e, inputIndex, name) => {
@@ -174,6 +171,7 @@ export default function EnterTimeSheet({navigation}) {
     TimeSheetServices.get_timesheet(orgId, userid, current_date).then(
       async (result) => {
         if (result.data.responseCode === 200) {
+		  setLoading(false);
           set_TotalHours(result.data.timesheetDetails[0].totalWeekhours);
           setOtEnable(result.data.timesheetDetails[0].otEnable);
           let i;
@@ -210,6 +208,7 @@ export default function EnterTimeSheet({navigation}) {
           setFobject(result.data.timesheetDetails[0]);
           setRemarks(result.data.timesheetDetails[0].remark);
         } else {
+		  setLoading(false);
           console.log('Something went wrong!');
         }
       },
@@ -230,6 +229,7 @@ export default function EnterTimeSheet({navigation}) {
   };
 
   const enterTimeSheetService = async () => {
+    setLoading(true);
     console.log(
       '.............................................................',
       '\n',
@@ -269,6 +269,7 @@ export default function EnterTimeSheet({navigation}) {
     TimeSheetServices.create_timesheet(request)
       .then((res) => {
         if (res.data.responseCode === 201) {
+		 setLoading(false);
           Alert.alert(
             'Submitted!',
             'Time Sheet Submitted Successfully',
@@ -291,7 +292,7 @@ export default function EnterTimeSheet({navigation}) {
           }
           navigation.navigate('ViewTimesheets');
         } else {
-          setLoader(false);
+          setLoading(false);
           alert(res.data.details);
         }
       })
@@ -351,6 +352,7 @@ export default function EnterTimeSheet({navigation}) {
   };
 
   const save = async () => {
+   setLoading(true);
     const login_data = await AsyncStorage.getItem('login_responce_data');
     const parsed_data = JSON.parse(login_data);
     const request = new FormData();
@@ -393,7 +395,7 @@ export default function EnterTimeSheet({navigation}) {
       TimeSheetServices.create_timesheet(request)
         .then((res) => {
           if (res.data.responseCode === 201) {
-            // setLoader(false);
+            setLoading(true);
             Alert.alert(
               'Saved!',
               'Time Sheet Saved Successfully',
@@ -406,7 +408,6 @@ export default function EnterTimeSheet({navigation}) {
             );
             navigation.navigate('ViewTimesheets');
           } else {
-            // setLoader(false);
             console.log(res.data.details);
           }
         })
@@ -441,9 +442,8 @@ export default function EnterTimeSheet({navigation}) {
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
-                  <View style={{backgroundColor: 'transparent', width: 20}}>
+                  <TouchableOpacity style={{backgroundColor: 'transparent', width: 20}} onPress={PastWeeksHandler} >
                     <Icon
-                      onPress={PastWeeksHandler}
                       style={{
                         fontSize: 24,
                         color: '#fff',
@@ -451,18 +451,17 @@ export default function EnterTimeSheet({navigation}) {
                       }}
                       name="angle-left"
                     />
-                  </View>
+                  </TouchableOpacity>
                   <Text style={styles.headerText}>
                     {moment(fobject.startDate).format('MM-DD-YYYY')} -
                     {moment(fobject.endDate).format('MM-DD-YYYY')}
                   </Text>
-                  <View style={{backgroundColor: 'transparent', width: 20}}>
+                  <TouchableOpacity style={{backgroundColor: 'transparent', width: 20,marginLeft:10}} onPress={futureWeeksHandler} >
                     <Icon
-                      onPress={futureWeeksHandler}
                       style={{fontSize: 24, color: '#fff'}}
                       name="angle-right"
                     />
-                  </View>
+                  </TouchableOpacity>
                 </View>
               </LinearGradient>
               {/* <EnterTimesheetBody /> */}
@@ -726,6 +725,7 @@ export default function EnterTimeSheet({navigation}) {
                         style={{
                           width: 44,
                           alignItems: 'center',
+						  marginTop:5
                         }}
                         onPress={() =>
                           navigation.navigate('CameraPage', {
@@ -743,7 +743,7 @@ export default function EnterTimeSheet({navigation}) {
                     <ScrollView>
                       {/*Showing the data of selected Multiple files*/}
                       {resultsArray.map((item, key) => (
-                        <View key={key}>
+                        <View key={key} style={{marginLeft:10}}>
                           <Text style={styles.textStyle}>
                             {item.name ? item.name : ''}
                           </Text>
