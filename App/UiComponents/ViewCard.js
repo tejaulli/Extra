@@ -57,13 +57,13 @@ const CardCollaps = (props) => {
   };
   const getStatustyle = (reviewerStatus) => {
     if (reviewerStatus === 'A') {
-      return '#02C54B';
+      return '#009A23'; //'#02C54B' -previous
     } else if (reviewerStatus === 'R') {
-      return '#990000';
+      return '#9B0000'; //'#990000' -previous
     } else if (reviewerStatus === 'O') {
-      return '#014ED0';
+      return '#4278FA'; //'#014ED0' -previous
     } else if (reviewerStatus === 'S') {
-      return '#FF5733';
+      return '#53586C'; //'#FF5733' -previous
     }
   };
 

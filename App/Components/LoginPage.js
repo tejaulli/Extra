@@ -208,6 +208,7 @@ export default class LoginPage extends Component {
           onPress={() => this.login_button()}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
+        <Text style={{fontSize: 12, color: 'grey'}}>v.0.0.2</Text>
         {this.state.showLoader ? (
           <ActivityIndicator color="grey" size="large" />
         ) : null}
