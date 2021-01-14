@@ -92,11 +92,11 @@ export class CameraPage extends Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={{flex: 0, margin: 20}}
-                  onPress={() => {
-                    this.props.navigation.goBack();
-                    this.props.navigation.state.params.onCapture(
+                  onPress={async () => {
+                    await this.props.navigation.state.params.onCapture(
                       this.state.picDetails,
                     );
+                    this.props.navigation.goBack();
                   }}>
                   <MaterialCommunityIcons
                     name="check-circle-outline"

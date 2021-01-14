@@ -97,6 +97,8 @@ export default class LoginPage extends Component {
         })
         .catch((error) => {
           console.error(error);
+          alert('some error');
+          alert(error);
         });
     }
   }
@@ -208,7 +210,7 @@ export default class LoginPage extends Component {
           onPress={() => this.login_button()}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableHighlight>
-        <Text style={{fontSize: 12, color: 'grey'}}>v.0.0.2</Text>
+        <Text style={{fontSize: 12, color: 'grey'}}>v.0.0.4</Text>
         {this.state.showLoader ? (
           <ActivityIndicator color="grey" size="large" />
         ) : null}
@@ -241,7 +243,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderRightWidth: 1,
     borderColor: 'lightgrey',
-    width: 250,
+    width: 280,
     height: 45,
     marginBottom: 20,
     flexDirection: 'row',

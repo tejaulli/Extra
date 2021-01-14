@@ -58,13 +58,22 @@ export default function EnterTimeSheet({navigation}) {
       const res = await DocumentPicker.pickMultiple({
         type: [DocumentPicker.types.allFiles],
       });
-      setResults(res.length);
-      await setResultsArray((prevState) => [...prevState, ...res]);
-      console.log(resultsArray);
 
-      debugger;
+      if (resultsArray.length + res.length + prevDBattachments.length < 4) {
+        setResults(res.length);
+        await setResultsArray((prevState) => [...prevState, ...res]);
+        // console.log(resultsArray);
+        console.log(
+          resultsArray.length + res.length + prevDBattachments.length,
+          resultsArray.length,
+          res.length,
+          prevDBattachments.length,
+        );
+      } else {
+        Alert.alert('Only 3 attachments allowed');
+      }
     } catch (err) {
-      debugger;
+      console.log(err);
       // if (DocumentPicker.isCancel(err)) {
       //   // User cancelled the picker, exit any dialogs or menus and move on
       // } else {
@@ -73,11 +82,22 @@ export default function EnterTimeSheet({navigation}) {
     }
   };
 
-  const onCapture = (data) => {
+  const countThreeAttachmets = () => {
+    if (resultsArray.length + prevDBattachments.length < 3) {
+      console.log(resultsArray.length + prevDBattachments.length);
+      return true;
+    } else {
+      Alert.alert('Only 3 attachments allowed');
+      return false;
+    }
+  };
+
+  const onCapture = async (data) => {
     if (Object.keys(data).length) {
       data.name = JSON.stringify(new Date()) + 'Capture';
       data.type = 'image/jpeg';
-      setResultsArray((prevState) => [...prevState, data]);
+      await setResultsArray((prevState) => [...prevState, data]);
+      return;
     }
     console.log('pic is not taken');
   };
@@ -687,7 +707,7 @@ export default function EnterTimeSheet({navigation}) {
                         bordered
                         placeholder="Enter remarks here"
                         onChangeText={remarkChamgedHandler}
-                        style={{marginLeft: 10, width: 290, borderRadius: 3}}
+                        style={{marginLeft: 10, flex: 1, borderRadius: 3}}
                       />
                     </View>
                   </Col>
@@ -704,7 +724,12 @@ export default function EnterTimeSheet({navigation}) {
                       <Text>Attachments :</Text>
                       <Button
                         light
-                        onPress={onPressImagePickr}
+                        onPress={() => {
+                          if (countThreeAttachmets()) {
+                            onPressImagePickr();
+                            return;
+                          }
+                        }}
                         disabled={
                           fobject.reviewerStatus == 'S' ||
                           fobject.reviewerStatus == 'A'
@@ -742,10 +767,16 @@ export default function EnterTimeSheet({navigation}) {
                             fobject.reviewerStatus == 'A'
                           ) {
                             return;
+                          } else if (countThreeAttachmets()) {
+                            navigation.navigate('CameraPage', {
+                              onCapture: onCapture,
+                            });
+                            return;
                           }
-                          navigation.navigate('CameraPage', {
-                            onCapture: onCapture,
-                          });
+
+                          // navigation.navigate('CameraPage', {
+                          //   onCapture: onCapture,
+                          // });
                         }}>
                         <MaterialCommunityIcons
                           name="camera"
@@ -756,14 +787,31 @@ export default function EnterTimeSheet({navigation}) {
                     </View>
                     {/* <Text style={{ marginLeft: 10,}}>Files Count:{totalResults}</Text> */}
                     <ScrollView>
-                      {/*Showing the data of selected Multiple files*/}
-                      {resultsArray.map((item, key) => (
-                        <View key={key} style={{marginLeft: 10}}>
-                          <Text style={styles.textStyle}>
-                            {item.name ? item.name : ''}
-                          </Text>
-                        </View>
-                      ))}
+                      {
+                        // If there are previously attached files
+                        prevDBattachments.length
+                          ? prevDBattachments.map((item) => (
+                              <View
+                                key={item.attachmentId}
+                                style={{marginLeft: 10}}>
+                                <Text style={styles.textStyle}>
+                                  {item.fileName ? item.fileName : ''}
+                                </Text>
+                              </View>
+                            ))
+                          : null
+                      }
+
+                      {
+                        // Showing the data of selected Multiple files
+                        resultsArray.map((item, key) => (
+                          <View key={key} style={{marginLeft: 10}}>
+                            <Text style={styles.textStyle}>
+                              {item.name ? item.name : ''}
+                            </Text>
+                          </View>
+                        ))
+                      }
                     </ScrollView>
                   </Col>
                 </Row>

@@ -92,7 +92,7 @@ const CardCollaps = (props) => {
               : 'Submitted'}
           </Text>
         </View>
-        <View>
+        <View style={{flex: 1}}>
           <Text style={{fontWeight: '600', padding: 10}}>
             <View>
               <Text
@@ -129,7 +129,7 @@ const CardCollaps = (props) => {
                   name="keyboard-arrow-down"
                 />
               </View> */}
-              <View style={{marginLeft: 20}}>
+              <View style={{marginRight: 20}}>
                 <Fontisto
                   style={[expanded ? styles.iconExpand : styles.iconClose]}
                   name="angle-down"
@@ -142,7 +142,7 @@ const CardCollaps = (props) => {
                 flexDirection: 'column-reverse',
                 justifyContent: 'center',
               }}>
-              <View style={{marginLeft: 20}}>
+              <View style={{marginRight: 20}}>
                 <Fontisto
                   style={[expanded ? styles.iconExpand : styles.iconClose]}
                   name="angle-right"
@@ -167,7 +167,7 @@ const CardCollaps = (props) => {
         //   style={[expanded ? styles.cardExpandedStyles : styles.cardClosedStyles]}
         style={{
           // flex: 2,
-          flexDirection: 'row',
+          flexDirection: 'column',
           backgroundColor: '#fff',
           padding: 10,
           //   fontStyle: 'italic',
@@ -177,69 +177,123 @@ const CardCollaps = (props) => {
           marginBottom: 5,
           justifyContent: 'space-between',
           height: 130,
-          flexWrap: 'wrap',
+          // flexWrap: 'wrap',
           padding: 15,
           //   borderRadius: 5,
           elevation: 5, // Android,
           //   borderColor: 'white',
           //   alignItems: 'stretch',
         }}>
-        <View style={{}}>
-          <Text style={{fontSize: 16, fontWeight: 'bold', marginRight: 20}}>
-            Regular Hours
-          </Text>
-          <Text style={{fontSize: 12}}>{item.regularHours}:00</Text>
-        </View>
-        <View style={{}}>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Total Hours</Text>
-          <Text style={{fontSize: 12, textAlign: 'right'}}>
-            {item.totalWeekhours}:00
-          </Text>
-        </View>
-        <View style={{}}>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-            Employee Remarks
-          </Text>
-          <Text style={{fontSize: 12}}>{item.remark}</Text>
-        </View>
-        <View style={{flexDirection: 'column'}}>
-          <Text style={{fontSize: 16, fontWeight: 'bold'}}>Submitted Date</Text>
-          <Text style={{fontSize: 12, textAlign: 'right'}}>
-            {submitted_date}
-          </Text>
-
-          <TouchableOpacity
-            onPress={() => {
-              if (item.reviewerStatus === 'A' || item.reviewerStatus === 'S') {
-                props.navigation.navigate('ViewDetailedTimeSheet', {
-                  inputDate: item.startDate,
-                });
-              } else {
-                props.navigation.navigate('EnterTimeSheet', {
-                  inputDate: item.startDate,
-                  navFrom: 'viewTimeSheets',
-                });
-              }
-            }}
-            style={{marginLeft: 23, marginTop: 15, width: 90, height: 22}}>
-            <Text
-              style={{
-                color: 'grey',
-                marginLeft: 45,
-                marginBottom: 3,
-                fontSize: 12,
-                textTransform: 'capitalize',
-              }}>
-              Open
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flex: 1,
+            // backgroundColor: 'grey',
+          }}>
+          <View style={{flex: 1, height: '100%'}}>
+            <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+              Regular Hours
             </Text>
-            <MaterialCommunityIcons
-              name="open-in-new"
-              size={16}
-              color="grey"
-              style={{marginTop: -18, marginLeft: 75}}
-            />
-          </TouchableOpacity>
+            <Text style={{fontSize: 12}}>{item.regularHours}:00</Text>
+          </View>
+          <View style={{flex: 1, height: '100%'}}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'right'}}>
+              Total Hours
+            </Text>
+            <Text style={{fontSize: 12, textAlign: 'right'}}>
+              {item.totalWeekhours}:00
+            </Text>
+          </View>
         </View>
+        <View
+          style={{
+            height: 3,
+            //dummy
+            // backgroundColor: 'orange'
+          }}></View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flex: 1,
+          }}>
+          <View
+            style={{
+              // backgroundColor: 'orange',
+              flex: 1,
+              height: '100%',
+              overflow: 'hidden',
+            }}>
+            <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+              Employee Remarks
+            </Text>
+            <Text style={{fontSize: 12}}>
+              {item.remark?.length > 25
+                ? item.remark.slice(0, 26) + '...'
+                : item.remark}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'column',
+              // backgroundColor: 'tomato',
+              // flexGrow: 1,
+              flex: 1,
+              height: '100%',
+            }}>
+            <Text
+              style={{fontSize: 16, fontWeight: 'bold', textAlign: 'right'}}>
+              Submitted Date
+            </Text>
+            <Text style={{fontSize: 12, textAlign: 'right'}}>
+              {submitted_date}
+            </Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            if (item.reviewerStatus === 'A' || item.reviewerStatus === 'S') {
+              props.navigation.navigate('ViewDetailedTimeSheet', {
+                inputDate: item.startDate,
+              });
+            } else {
+              props.navigation.navigate('EnterTimeSheet', {
+                inputDate: item.startDate,
+                navFrom: 'viewTimeSheets',
+              });
+            }
+          }}
+          style={{
+            // marginLeft: 23,
+            // marginTop: 15,
+            // width: 90,
+            height: 22,
+            flexDirection: 'row',
+            alignItems: 'flex-end',
+            justifyContent: 'flex-end',
+            // backgroundColor: 'tomato',
+          }}>
+          <Text
+            style={{
+              color: 'grey',
+              // marginLeft: 45,
+              // marginBottom: 3,
+              fontSize: 12,
+              textTransform: 'capitalize',
+            }}>
+            Open
+          </Text>
+          <MaterialCommunityIcons
+            name="open-in-new"
+            size={16}
+            color="grey"
+            // style={{marginTop: -18, marginLeft: 75}}
+          />
+        </TouchableOpacity>
       </View>
     );
   };

@@ -20,22 +20,41 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Header from '../UiComponents/Header';
 export default class ViewTimesheets extends Component {
-  empDetails = [];
-  orgId = 1;
-  userId = 1;
+  constructor(props) {
+    super(props);
+    this.empDetails = [];
+    this.orgId = 1;
+    this.userId = 1;
+    this.state = {
+      employeeData: [],
+      dataForFiltering: [],
+      userId: 1,
+      show: false,
+      showImage: false,
+      status: 'All',
+      startDate: null,
+      endDate: null,
+      showLoader: false,
+      refreshScreen: false,
+    };
+  }
 
-  state = {
-    employeeData: [],
-    dataForFiltering: [],
-    userId: 1,
-    show: false,
-    showImage: false,
-    status: 'All',
-    startDate: null,
-    endDate: null,
-    showLoader: false,
-    refreshScreen: false,
-  };
+  // empDetails = [];
+  // orgId = 1;
+  // userId = 1;
+
+  // state = {
+  //   employeeData: [],
+  //   dataForFiltering: [],
+  //   userId: 1,
+  //   show: false,
+  //   showImage: false,
+  //   status: 'All',
+  //   startDate: null,
+  //   endDate: null,
+  //   showLoader: false,
+  //   refreshScreen: false,
+  // };
   // this.setState({ show: true })
   componentDidMount() {
     debugger;
